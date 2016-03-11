@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using TcpHolePunching;
-using TcpHolePunching.Messages;
 
 namespace IdealClient
 {
@@ -16,7 +9,7 @@ namespace IdealClient
     {
         private static NetworkPeer Peer { get; set; }
 
-        static void Main(string[] args)
+        static void Main()
         {
             Console.Title = "Ideal Client - TCP Hole Punching Proof of Concept";
 
@@ -31,21 +24,21 @@ namespace IdealClient
             Peer.Socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
 
             Console.Write("Bind to which port?: ");
-            int portToBind = Int32.Parse(Console.ReadLine());
+            var portToBind = Int32.Parse(Console.ReadLine());
             Peer.Bind(new IPEndPoint(IPAddress.Any, portToBind));
 
             Console.Write("Endpoint of your peer: ");
 
             var introducerEndpoint = Console.ReadLine().Parse();
 
-            Console.WriteLine(String.Format("Connecting to at {0}:{1}...", introducerEndpoint.Address, introducerEndpoint.Port));
+            Console.WriteLine("Connecting to at {0}:{1}...", introducerEndpoint.Address, introducerEndpoint.Port);
+
             Peer.Connect(introducerEndpoint.Address, introducerEndpoint.Port);
 
             Console.Write("Press <ENTER> to set socket options back to normal.");
             Console.ReadLine();
-            Peer.Socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.IpTimeToLive, 4);
 
-            Application.Run();
+            Peer.Socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.IpTimeToLive, 4);
         }
 
         static void Peer_OnConnectionAccepted(object sender, ConnectionAcceptedEventArgs e)

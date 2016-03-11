@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
 using TcpHolePunching.Messages;
 
@@ -34,9 +30,11 @@ namespace TcpHolePunching
         public NetworkClient()
         {
             Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
             // Set our special Tcp hole punching socket options
             Socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             Socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+
             Buffer = new byte[1024];
         }
 
@@ -55,13 +53,13 @@ namespace TcpHolePunching
 
         private void Task_OnConnectSuccessful()
         {
-            Console.WriteLine(String.Format("Connected to {0}.", Socket.RemoteEndPoint));
+            Console.WriteLine("Connected to {0}.", Socket.RemoteEndPoint);
 
             Task_BeginReceive();
 
             // Invoke the event
             if (OnConnectionSuccessful != null)
-                OnConnectionSuccessful(this, new ConnectionAcceptedEventArgs() { Socket = Socket });
+                OnConnectionSuccessful(this, new ConnectionAcceptedEventArgs { Socket = Socket });
         }
 
         public void Send(MessageBase messageBase)
@@ -78,10 +76,9 @@ namespace TcpHolePunching
         private void Task_OnSendCompleted(int numBytesSent, int expectedBytesSent, EndPoint to, MessageType messageType)
         {
             if (numBytesSent != expectedBytesSent)
-                Console.WriteLine(String.Format("Warning: Expected to send {0} bytes but actually sent {1}!",
-                                                expectedBytesSent, numBytesSent));
+                Console.WriteLine("Warning: Expected to send {0} bytes but actually sent {1}!", expectedBytesSent, numBytesSent);
 
-            Console.WriteLine(String.Format("Sent a {0} byte {1}Message to {2}.", numBytesSent, messageType, to));
+            Console.WriteLine("Sent a {0} byte {1} Message to {2}.", numBytesSent, messageType, to);
 
             if (OnMessageSent != null)
                 OnMessageSent(this, new MessageSentEventArgs() {Length = numBytesSent, To = to});
@@ -114,10 +111,10 @@ namespace TcpHolePunching
             message.ReadPayload(reader);
             reader.Position = 0;
 
-            Console.WriteLine(String.Format("Received a {0} byte {1}Message from {2}.", numBytesRead, message.MessageType, Socket.RemoteEndPoint));
+            Console.WriteLine("Received a {0} byte {1} Message from {2}.", numBytesRead, message.MessageType, Socket.RemoteEndPoint);
 
             if (OnMessageReceived != null)
-                OnMessageReceived(this, new MessageReceivedEventArgs() { From = (IPEndPoint) Socket.RemoteEndPoint, MessageReader = reader, MessageType = message.MessageType });
+                OnMessageReceived(this, new MessageReceivedEventArgs { From = (IPEndPoint) Socket.RemoteEndPoint, MessageReader = reader, MessageType = message.MessageType });
         }
 
         /// <summary>

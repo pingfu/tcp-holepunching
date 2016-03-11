@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
 using TcpHolePunching.Messages;
 
@@ -66,13 +64,13 @@ namespace TcpHolePunching
 
         private void Task_OnConnectionAccepted(Socket socket)
         {
-            Console.WriteLine(String.Format("Connection to {0} accepted.", socket.RemoteEndPoint));
+            Console.WriteLine("Connection to {0} accepted.", socket.RemoteEndPoint);
 
             // If the registrant was already registered
-            if (Clients.FindAll(registrant => registrant.RemoteEndPoint == socket.RemoteEndPoint).Any())
+            if (Clients.FindAll(registrant => registrant.RemoteEndPoint.Equals(socket.RemoteEndPoint)).Any())
             {
                 // Remove the registrant
-                Clients.RemoveAll(registrant => registrant.RemoteEndPoint == socket.RemoteEndPoint);
+                Clients.RemoveAll(registrant => registrant.RemoteEndPoint.Equals(socket.RemoteEndPoint));
             }
 
             // Register the registrant
@@ -83,12 +81,12 @@ namespace TcpHolePunching
             
             // Invoke the event
             if (OnConnectionAccepted != null)
-                OnConnectionAccepted(this, new ConnectionAcceptedEventArgs() { Socket = socket } );
+                OnConnectionAccepted(this, new ConnectionAcceptedEventArgs { Socket = socket } );
         }
 
         public void Send(EndPoint to, MessageBase messageBase)
         {
-            var registrant = Clients.Find(r => r.RemoteEndPoint == to);
+            var registrant = Clients.Find(r => r.RemoteEndPoint.Equals(to));
 
             // If the registrant exists
             if (registrant != null && registrant.Socket.Connected)
@@ -138,10 +136,10 @@ namespace TcpHolePunching
             message.ReadPayload(reader);
             reader.Position = 0;
 
-            Console.WriteLine(String.Format("Received a {0} byte {1}Message from {2}.", numBytesRead, message.MessageType, registrant.Socket.RemoteEndPoint));
+            Console.WriteLine("Received a {0} byte {1}Message from {2}.", numBytesRead, message.MessageType, registrant.Socket.RemoteEndPoint);
 
             if (OnMessageReceived != null)
-                OnMessageReceived(this, new MessageReceivedEventArgs() { From = (IPEndPoint) registrant.RemoteEndPoint, MessageReader = reader, MessageType = message.MessageType });
+                OnMessageReceived(this, new MessageReceivedEventArgs { From = (IPEndPoint) registrant.RemoteEndPoint, MessageReader = reader, MessageType = message.MessageType });
         }
 
         /// <summary>
