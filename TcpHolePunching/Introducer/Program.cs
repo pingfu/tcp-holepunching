@@ -7,20 +7,20 @@ using TcpHolePunching.Messages;
 
 namespace Introducer
 {
-    class Program
+    public class Program
     {
-        static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
+        private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
 
         private static NetworkIntroducer Introducer { get; set; }
 
-        static void Main()
+        private static void Main()
         {
             Console.Title = "Introducer - TCP Hole Punching Proof of Concept";
 
             Introducer = new NetworkIntroducer();
-            Introducer.OnConnectionAccepted += Introducer_OnConnectionAccepted;
-            Introducer.OnMessageSent += Introducer_OnMessageSent;
-            Introducer.OnMessageReceived += Introducer_OnMessageReceived;
+            Introducer.OnConnectionAccepted += IntroducerOnConnectionAccepted;
+            Introducer.OnMessageSent += IntroducerOnMessageSent;
+            Introducer.OnMessageReceived += IntroducerOnMessageReceived;
             Introducer.Listen(new IPEndPoint(IPAddress.Any, 1618));
 
             Console.WriteLine("Listening for clients on {0}...", Introducer.Socket.LocalEndPoint);
@@ -37,15 +37,15 @@ namespace Introducer
             QuitEvent.WaitOne();
         }
 
-        static void Introducer_OnConnectionAccepted(object sender, ConnectionAcceptedEventArgs e)
+        private static void IntroducerOnConnectionAccepted(object sender, ConnectionAcceptedEventArgs e)
         {
         }
 
-        static void Introducer_OnMessageSent(object sender, MessageSentEventArgs e)
+        private static void IntroducerOnMessageSent(object sender, MessageSentEventArgs e)
         {
         }
 
-        static void Introducer_OnMessageReceived(object sender, MessageReceivedEventArgs e)
+        private static void IntroducerOnMessageReceived(object sender, MessageReceivedEventArgs e)
         {
             switch (e.MessageType)
             {
@@ -55,10 +55,10 @@ namespace Introducer
 
                         message.ReadPayload(e.MessageReader);
 
-                        // A client wants to register
-                        // Get his internal endpoint
+                        // A client wants to register - note their internal endpoint
                         var internalEndPoint = message.InternalClientEndPoint;
-                        // Get his external endpoint
+
+                        // note the external endpoint too
                         var externalEndPoint = e.From;
 
                         Introducer.Registrants.Add(new Registrant
@@ -69,7 +69,7 @@ namespace Introducer
 
                         Introducer.Send(e.From, new ResponseIntroducerRegistrationMessage
                                                     {
-                                                        RegisteredEndPoint = e.From
+                                                        RegisteredEndPoint = externalEndPoint
                                                     });
                     }
                     break;

@@ -100,13 +100,12 @@ namespace TcpHolePunching
         private void Task_OnSendCompleted(int numBytesSent, int expectedBytesSent, EndPoint to, MessageType messageType)
         {
             if (numBytesSent != expectedBytesSent)
-                Console.WriteLine(String.Format("Warning: Expected to send {0} bytes but actually sent {1}!",
-                                                expectedBytesSent, numBytesSent));
+                Console.WriteLine("Warning: Expected to send {0} bytes but actually sent {1}!", expectedBytesSent, numBytesSent);
 
-            Console.WriteLine(String.Format("Sent a {0} byte {1}Message to {2}.", numBytesSent, messageType, to));
+            Console.WriteLine("Sent a {0} byte {1}Message to {2}.", numBytesSent, messageType, to);
 
             if (OnMessageSent != null)
-                OnMessageSent(this, new MessageSentEventArgs() {Length = numBytesSent, To = to});
+                OnMessageSent(this, new MessageSentEventArgs {Length = numBytesSent, To = to});
         }
 
         private void Task_BeginReceive(Client registrant)
@@ -121,7 +120,7 @@ namespace TcpHolePunching
                 }
                 catch (Exception ex)
                 {
-                    var exceptionMessage = (ex.InnerException != null) ? ex.InnerException.Message : ex.Message;
+                    var exceptionMessage = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                     Console.WriteLine(exceptionMessage);
                     ShutdownAndClose();
                 }
@@ -136,7 +135,7 @@ namespace TcpHolePunching
             message.ReadPayload(reader);
             reader.Position = 0;
 
-            Console.WriteLine("Received a {0} byte {1}Message from {2}.", numBytesRead, message.MessageType, registrant.Socket.RemoteEndPoint);
+            Console.WriteLine("Received a {0} byte {1} Message from {2}.", numBytesRead, message.MessageType, registrant.Socket.RemoteEndPoint);
 
             if (OnMessageReceived != null)
                 OnMessageReceived(this, new MessageReceivedEventArgs { From = (IPEndPoint) registrant.RemoteEndPoint, MessageReader = reader, MessageType = message.MessageType });
