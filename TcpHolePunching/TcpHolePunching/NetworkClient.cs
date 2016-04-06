@@ -15,6 +15,7 @@ namespace TcpHolePunching
         /// Gets the underlying raw socket.
         /// </summary>
         public Socket Socket { get; private set; }
+
         /// <summary>
         /// The buffer in which to receive bytes from the transport.
         /// </summary>
@@ -67,7 +68,7 @@ namespace TcpHolePunching
             // If the registrant exists
             if (Socket.Connected)
             {
-                var data = messageBase.GetBytes();
+                var data = messageBase.BinarySerialize();
                 var task = Task.Factory.FromAsync<Int32>(Socket.BeginSend(data, 0, data.Length, SocketFlags.None, null, Socket), Socket.EndSend);
                 task.ContinueWith(nextTask => Task_OnSendCompleted(task.Result, data.Length, Socket.RemoteEndPoint, messageBase.MessageType), TaskContinuationOptions.OnlyOnRanToCompletion);
             }
@@ -105,16 +106,12 @@ namespace TcpHolePunching
 
         private void Task_OnReceiveCompleted(int numBytesRead)
         {
-            // Build back our MessageReader
-            var reader = new BufferValueReader(Buffer);
-            var message = new Message();
-            message.ReadPayload(reader);
-            reader.Position = 0;
+            var message = Buffer.BinaryDeserialize<MessageBase>();
 
             Console.WriteLine("Received a {0} byte {1} Message from {2}.", numBytesRead, message.MessageType, Socket.RemoteEndPoint);
 
             if (OnMessageReceived != null)
-                OnMessageReceived(this, new MessageReceivedEventArgs { From = (IPEndPoint) Socket.RemoteEndPoint, MessageReader = reader, MessageType = message.MessageType });
+                OnMessageReceived(this, new MessageReceivedEventArgs { From = (IPEndPoint) Socket.RemoteEndPoint, Data = Buffer, MessageType = message.MessageType });
         }
 
         /// <summary>

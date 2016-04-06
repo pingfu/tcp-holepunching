@@ -51,9 +51,7 @@ namespace Introducer
             {
                 case MessageType.RequestIntroducerRegistration:
                     {
-                        var message = new RequestIntroducerRegistrationMessage();
-
-                        message.ReadPayload(e.MessageReader);
+                        var message = e.Data.BinaryDeserialize<RequestIntroducerRegistrationMessage>();
 
                         // A client wants to register - note their internal endpoint
                         var internalEndPoint = message.InternalClientEndPoint;
@@ -75,9 +73,7 @@ namespace Introducer
                     break;
                 case MessageType.RequestIntroducerIntroduction:
                     {
-                        var message = new RequestIntroducerIntroductionMessage();
-
-                        message.ReadPayload(e.MessageReader);
+                        var message = e.Data.BinaryDeserialize<RequestIntroducerIntroductionMessage>();
 
                         // A client, A, wants to be introduced to another peer, B
                         var bExternalEndPoint = message.ExternalPeerEndPoint;

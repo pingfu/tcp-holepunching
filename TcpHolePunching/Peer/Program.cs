@@ -82,7 +82,6 @@ namespace Peer
                 case MessageType.ResponseIntroducerRegistration:
                     {
                         var message = new ResponseIntroducerRegistrationMessage();
-                        message.ReadPayload(e.MessageReader);
 
                         Console.WriteLine("Introducer: You have been registered as \"{0}\".", message.RegisteredEndPoint);
 
@@ -96,7 +95,6 @@ namespace Peer
                 case MessageType.ResponseIntroducerIntroduction:
                     {
                         var message = new ResponseIntroducerIntroductionMessage();
-                        message.ReadPayload(e.MessageReader);
 
                         Console.WriteLine("Introducer: Your peer's internal endpoint is \"{0}\".", message.InternalPeerEndPoint);
                         Console.WriteLine("Introducer: Your peer's external endpoint is \"{0}\".", message.ExternalPeerEndPoint);

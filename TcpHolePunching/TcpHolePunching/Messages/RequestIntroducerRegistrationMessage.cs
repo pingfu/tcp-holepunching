@@ -1,28 +1,30 @@
 ﻿using System.Net;
+using MsgPack;
+using Newtonsoft.Json;
+using TcpHolePunching.JsonConverters;
 
 namespace TcpHolePunching.Messages
 {
-    public class RequestIntroducerRegistrationMessage : MessageBase
+    public class RequestIntroducerRegistrationMessage : MessageBase, IPackable, IUnpackable
     {
+        [JsonProperty]
+        [JsonConverter(typeof(IpEndPointConverter))]
         public IPEndPoint InternalClientEndPoint { get; set; }
 
         public RequestIntroducerRegistrationMessage()
             : base(MessageType.RequestIntroducerRegistration)
         {
+            MessageBytes = this.BinarySerialize();
         }
 
-        public override void WritePayload(IValueWriter writer)
+        public void PackToMessage(Packer packer, PackingOptions options)
         {
-            base.WritePayload(writer);
-            writer.WriteBytes(InternalClientEndPoint.Address.GetAddressBytes());
-            writer.WriteInt32(InternalClientEndPoint.Port);
+            throw new System.NotImplementedException();
         }
 
-        public override void ReadPayload(IValueReader reader)
+        public void UnpackFromMessage(Unpacker unpacker)
         {
-            base.ReadPayload(reader);
-            var endPointAddress = new IPAddress(reader.ReadBytes());
-            InternalClientEndPoint = new IPEndPoint(endPointAddress, reader.ReadInt32());
+            throw new System.NotImplementedException();
         }
     }
 }

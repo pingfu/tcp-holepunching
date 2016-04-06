@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace TcpHolePunching
@@ -16,7 +12,7 @@ namespace TcpHolePunching
 
         public event EventHandler<ConnectionAcceptedEventArgs> OnConnectionAccepted;
 
-        public NetworkPeer() : base()
+        public NetworkPeer()
         {
             PeerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             Socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
@@ -25,7 +21,7 @@ namespace TcpHolePunching
         }
 
         /// <summary>
-        /// Only binds without listening.
+        /// binds without listening
         /// </summary>
         public void Bind(EndPoint on)
         {
@@ -34,7 +30,7 @@ namespace TcpHolePunching
 
         public void Listen()
         {
-            Socket.Listen(Int32.MaxValue);
+            Socket.Listen(int.MaxValue);
             Task_BeginAccepting();
         }
 
@@ -50,7 +46,7 @@ namespace TcpHolePunching
 
         private void Task_OnConnectionAccepted(Socket socket)
         {
-            Console.WriteLine(String.Format("Connection to {0} accepted.", socket.RemoteEndPoint));
+            Console.WriteLine("Connection to {0} accepted.", socket.RemoteEndPoint);
 
             PeerSocket = socket;
 

@@ -5,10 +5,14 @@ D:\git\tcp-holepunching\TcpHolePunching\Introducer\bin\Debug\TcpHolePunching.pdb
 D:\git\tcp-holepunching\TcpHolePunching\Introducer\obj\x86\Debug\Introducer.csprojResolveAssemblyReference.cache
 D:\git\tcp-holepunching\TcpHolePunching\Introducer\obj\x86\Debug\Introducer.exe
 D:\git\tcp-holepunching\TcpHolePunching\Introducer\obj\x86\Debug\Introducer.pdb
-C:\git\tcp-holepunching\TcpHolePunching\Introducer\obj\x86\Debug\Introducer.exe
-C:\git\tcp-holepunching\TcpHolePunching\Introducer\obj\x86\Debug\Introducer.pdb
 C:\git\tcp-holepunching\TcpHolePunching\Introducer\bin\Debug\Introducer.exe
 C:\git\tcp-holepunching\TcpHolePunching\Introducer\bin\Debug\Introducer.pdb
 C:\git\tcp-holepunching\TcpHolePunching\Introducer\bin\Debug\TcpHolePunching.dll
 C:\git\tcp-holepunching\TcpHolePunching\Introducer\bin\Debug\TcpHolePunching.pdb
+C:\git\tcp-holepunching\TcpHolePunching\Introducer\obj\x86\Debug\Introducer.exe
+C:\git\tcp-holepunching\TcpHolePunching\Introducer\obj\x86\Debug\Introducer.pdb
 C:\git\tcp-holepunching\TcpHolePunching\Introducer\obj\x86\Debug\Introducer.csprojResolveAssemblyReference.cache
+C:\git\tcp-holepunching\TcpHolePunching\Introducer\bin\Debug\Newtonsoft.Json.dll
+C:\git\tcp-holepunching\TcpHolePunching\Introducer\bin\Debug\MsgPack.dll
+C:\git\tcp-holepunching\TcpHolePunching\Introducer\bin\Debug\Newtonsoft.Json.xml
+C:\git\tcp-holepunching\TcpHolePunching\Introducer\bin\Debug\MsgPack.xml

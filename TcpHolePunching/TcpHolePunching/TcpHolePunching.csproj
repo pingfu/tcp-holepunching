@@ -38,35 +38,37 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MsgPack">
+      <HintPath>..\packages\MsgPack.Cli.0.6.8\lib\net40-client\MsgPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BufferValueReader.cs" />
-    <Compile Include="BufferValueWriter.cs" />
-    <Compile Include="ISerializable.cs" />
-    <Compile Include="ISerializer.cs" />
-    <Compile Include="IValueReader.cs" />
-    <Compile Include="IValueWriter.cs" />
-    <Compile Include="Messages\Message.cs" />
+    <Compile Include="JsonConverters\IpAddressExtensions.cs" />
+    <Compile Include="JsonConverters\IpEndPointConverter.cs" />
+    <Compile Include="Messages\AnnounceConnectedPeers.cs" />
     <Compile Include="Messages\MessageBase.cs" />
-    <Compile Include="MessageExtensions.cs" />
     <Compile Include="MessageSentEventArgs.cs" />
     <Compile Include="Messages\RequestIntroducerIntroductionMessage.cs" />
     <Compile Include="Messages\RequestIntroducerRegistrationMessage.cs" />
     <Compile Include="Messages\ResponseIntroducerIntroductionMessage.cs" />
     <Compile Include="Messages\ResponseIntroducerRegistrationMessage.cs" />
     <Compile Include="NetworkPeer.cs" />
-    <Compile Include="ObjectSerializer.cs" />
     <Compile Include="ConnectionAcceptedEventArgs.cs" />
     <Compile Include="MessageReceivedEventArgs.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Registrant.cs" />
     <Compile Include="SerializerExtensions.cs" />
-    <Compile Include="StreamValueReader.cs" />
-    <Compile Include="StreamValueWriter.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="NetworkIntroducer.cs" />
     <Compile Include="NetworkClient.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

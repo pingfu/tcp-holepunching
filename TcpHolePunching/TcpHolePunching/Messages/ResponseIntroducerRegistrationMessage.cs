@@ -1,28 +1,19 @@
 ﻿using System.Net;
+using Newtonsoft.Json;
+using TcpHolePunching.JsonConverters;
 
 namespace TcpHolePunching.Messages
 {
     public class ResponseIntroducerRegistrationMessage : MessageBase
     {
+        [JsonProperty]
+        [JsonConverter(typeof(IpEndPointConverter))]
         public IPEndPoint RegisteredEndPoint { get; set; }
 
         public ResponseIntroducerRegistrationMessage()
             : base(MessageType.ResponseIntroducerRegistration)
         {
-        }
-
-        public override void WritePayload(IValueWriter writer)
-        {
-            base.WritePayload(writer);
-            writer.WriteBytes(RegisteredEndPoint.Address.GetAddressBytes());
-            writer.WriteInt32(RegisteredEndPoint.Port);
-        }
-
-        public override void ReadPayload(IValueReader reader)
-        {
-            base.ReadPayload(reader);
-            var endPointAddress = new IPAddress(reader.ReadBytes());
-            RegisteredEndPoint = new IPEndPoint(endPointAddress, reader.ReadInt32());
+            base.MessageBytes = this.BinarySerialize();
         }
     }
 }
